@@ -9,7 +9,9 @@ import arrow
 from typing import List
 import matplotlib.pyplot as plt
 import pandas as pd
+import logging
 
+logger =  logging.getLogger(__name__)
 
 """_______________________________________________________________
  daemon_process function. 
@@ -18,6 +20,7 @@ import pandas as pd
  data every 5 mins until it receives an interruption signal.  
  _________________________________________________________________""" 
 def daemon_process(config:Configuration,event:Event):
+    logger.info('Daemon process started...')
     end_time = local_timestamp_with_lag(config)
     start_time,end_time = get_period(end_time,config)
     df = pd.DataFrame(columns = ['time','co2','renewables'])
@@ -32,7 +35,7 @@ def daemon_process(config:Configuration,event:Event):
         start_time_arrow = arrow.get(start_time)
         end_time_arrow = date_diff_mins(start_time_arrow,config.interval)
         end_time = format_time(end_time_arrow)
-    print('Daemon process ended')
+    logger.info('Daemon process ended...')
 
 """ plot_co2  To plot co2 against time """
 def plot_co2(dataframe):

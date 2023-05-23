@@ -37,7 +37,7 @@ def process_result(result: Dict) ->Tuple[float,float]:
     records = result.get('records', [])
     df = pd.json_normalize(records)
     agg = df.agg(
-        sum_co2_emission = ('CO2Emission','sum'),
+        sum_co2_emission = ('CO2Emission','average'),
         sum_prod_gt100 = ('ProductionGe100MW','sum'),
         sum_prod_lt100 = ('ProductionLt100MW','sum'),
         sum_solar = ('SolarPower','sum'),

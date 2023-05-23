@@ -7,7 +7,8 @@ from configuration.statnett_usecase_config import Configuration
 import yaml 
 import signal
 import sys
-import logging 
+import logging
+from traceback import format_exc
 
 
 stop_event = Event() # Event to indicate the terminate signal and end the program gracefully.
@@ -25,16 +26,22 @@ logger =  logging.getLogger(__name__)
 __________________________________________________________________"""
 def main():
     # run the main thread for a while
+    try:
+        logger.info('Main thread started...')    
+        signal.signal(signal.SIGTERM, signal_term_handler)
+        signal.signal(signal.SIGINT, signal_term_handler)
+        config = config_load()    
+        thread = Thread(target=daemon_process(config,stop_event), daemon=True, name="Background")
+        thread.start()  
+        atexit.register(stop_background, stop_event, thread)
+        logger.info('Main thread completed successfully...')
+    except Exception as e:
+        logger.error(format_exc())
+        logger.info('Main thread completed with error ...')
+        
 
-    logger.info('Main thread started...')    
-    signal.signal(signal.SIGTERM, signal_term_handler)
-    signal.signal(signal.SIGINT, signal_term_handler)
-    config = config_load()    
-    thread = Thread(target=daemon_process(config,stop_event), daemon=True, name="Background")
-    thread.start()  
-    atexit.register(stop_background, stop_event, thread)
-    logger.info('Main thread completed...') 
-    print('Main thread completed')
+
+    
 
 
 """ config_path function will return the current working directory """
