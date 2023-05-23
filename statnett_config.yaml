@@ -1,0 +1,7 @@
+configuration:
+  url: "https://api.energidataservice.dk/dataset/PowerSystemRightNow"
+  limit: 1
+  interval: 5
+  delay: 10
+  backfill_date: "2023-05-22T13:21"
+  tz: "Europe/Copenhagen"

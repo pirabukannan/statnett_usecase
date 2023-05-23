@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "statnett-usecase"
+version = "0.1.0"
+description = "This is a test application to present aggreagated data for  Danish power system production/flow every 5 mins"
+authors = ["pirabukannan"]
+readme = "README.md"
+packages = [{include = "statnett_usecase"}]
+[tool.black]
+line-length = 88
+target-version = ['py37', 'py38']
+[tool.poetry.dependencies]
+python = "^3.8"
+pytest = "^7.3.1"
+arrow = "^1.2.3"
+pydantic = "^1.10.7"
+pyyaml = "^6.0"
+requests = "^2.30.0"
+pandas = "^2.0.1"
+matplotlib = "^3.7.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
