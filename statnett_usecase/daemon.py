@@ -22,13 +22,14 @@ logger =  logging.getLogger(__name__)
 def daemon_process(config:Configuration,event:Event):
     logger.info('Daemon process started...')
     end_time = local_timestamp_with_lag(config)
-    start_time,end_time = get_period(end_time,config)
+    start_time,end_time = get_period(end_time,config.interval)
     df = pd.DataFrame(columns = ['time','co2','renewables'])
     while True:
         if event.is_set():
             break       
         co2,renewables = get_energy_data(config,start_time,end_time)
         df.loc[len(df)] = {'time':time,'co2':co2,'renewables':renewables}
+        print(df)
         plot_co2(df)
         time.sleep(config.interval*60)
         start_time=end_time

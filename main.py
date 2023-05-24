@@ -1,4 +1,5 @@
 from statnett_usecase.daemon import daemon_process
+from statnett_usecase.daemon_backfill import daemon_backfill_process
 from threading import Thread, Event
 import atexit
 import time
@@ -30,12 +31,18 @@ def main():
         logger.info('Main thread started...')    
         signal.signal(signal.SIGTERM, signal_term_handler)
         signal.signal(signal.SIGINT, signal_term_handler)
-        config = config_load()    
-        thread = Thread(target=daemon_process(config,stop_event), daemon=True, name="Background")
+        config = config_load()
+        if config.backfill_ind == "Y":
+            logger.info(f'Process running in backfill mode:{config.backfill_date}')
+            thread = Thread(target=daemon_backfill_process(config,stop_event), daemon=True, name="Background")
+        else:
+            logger.info(f'Process running in current_mode..')
+            thread = Thread(target=daemon_process(config,stop_event), daemon=True, name="Background")
         thread.start()  
         atexit.register(stop_background, stop_event, thread)
         logger.info('Main thread completed successfully...')
     except Exception as e:
+        print(format_exc())
         logger.error(format_exc())
         logger.info('Main thread completed with error ...')
         

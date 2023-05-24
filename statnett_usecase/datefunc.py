@@ -34,9 +34,9 @@ def local_time(input_datetime_str:str,tz: str) -> Arrow:
     return local_time
 
 """  Return the period for a given arrow object and given interval.  """
-def get_period(current_time: Arrow, config: Configuration) -> Tuple[str,str]:
+def get_period(current_time: Arrow, interval: int) -> Tuple[str,str]:
     end_time = current_time
-    start_time = date_diff_mins(end_time,config.interval * -1)
+    start_time = date_diff_mins(end_time,interval * -1)
     end_time_str = format_time(end_time)
     start_time_str = format_time(start_time)
     return start_time_str,end_time_str
